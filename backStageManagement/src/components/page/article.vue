@@ -1,8 +1,10 @@
 <template>
     <div class="box">
         <header class="head">
-            <router-link to="/" tag="span" title="返回首页">首页</router-link> &gt; 
-            <span :title="'查看'+classOneName">{{classOneName}}</span> &gt; <span>{{everyArticle.article_name}}</span>
+            <router-link to="/index/main" tag="span" title="返回首页">首页</router-link> &rArr; 
+            <span :title="'查看'+classOneName">{{classOneName}}</span> &rArr; 
+            <span :title="'查看'+classTwoName">{{classTwoName}}</span> &rArr; 
+            <span>{{everyArticle.article_name}}</span>
         </header>
         <div class="address">
             <h1>{{everyArticle.article_name}}</h1>
@@ -15,8 +17,8 @@
         </div>
         <div class="context" v-html="everyArticle.content"></div>
         <div class="posts">
-            <span class="previousPosts" @click="switchArticle(preventArticle.id)" v-show="preventArticle.id">&lt; {{preventArticle.article_name}}</span>
-            <span class="nextsPosts" @click="switchArticle(nextArticle.id)" v-show="nextArticle.id">{{nextArticle.article_name}} &gt;</span>
+            <span class="previousPosts" @click="switchArticle(preventArticle.id)" v-show="preventArticle.id"><a href="javascript:scroll(0,0)">&laquo; {{preventArticle.article_name}}</a></span>
+            <span class="nextsPosts" @click="switchArticle(nextArticle.id)" v-show="nextArticle.id"><a href="javascript:scroll(0,0)">{{nextArticle.article_name}} &raquo;</a></span>
         </div>
     </div>   
 </template>
@@ -32,12 +34,20 @@
         },
         computed:{
             ...mapState({
-                 allData:state=>state.module_one.allData,
+                 currentArticle:state=>state.module_one.currentArticle,
                  classOne:state=>state.module_one.classOne
             }),
             classOneName:{
                 get(){
-                    return this.classOneName = this.classOne[this.everyArticle.oneId]
+                    return this.classOneName = this.classOne[this.everyArticle.oneId];
+                },
+                set(){
+
+                }
+            },
+            classTwoName:{
+                get(){
+                    return this.classTwoName = this.classOne[this.everyArticle.twoId]
                 },
                 set(){
 
@@ -56,37 +66,35 @@
             switchButton(){
                 this.preventArticle = {};
                 this.nextArticle = {}
-                this.allData.forEach((val,index)=>{
+                this.currentArticle.forEach((val,index)=>{
                     if(val.id === this.everyArticle.id){
                         if(index){
-                            this.preventArticle.id = this.allData[index-1].id;
-                            this.preventArticle.article_name = this.allData[index-1].article_name;
+                            this.preventArticle.id = this.currentArticle[index-1].id;
+                            this.preventArticle.article_name = this.currentArticle[index-1].article_name;
                         }
-                        if(index !== this.allData.length-1){
-                            this.nextArticle.id = this.allData[index+1].id;
-                            this.nextArticle.article_name = this.allData[index+1].article_name;
-                        }                 
+                        if(index !== this.currentArticle.length-1){
+                            this.nextArticle.id = this.currentArticle[index+1].id;
+                            this.nextArticle.article_name = this.currentArticle[index+1].article_name;
+                        }          
                     }
                 },this)
             },
             switchArticle(id){
-               this.axios.get("/api/front_article/getArticle?id="+id,)
+               this.axios.get("/api/front_article/getArticle?id="+id)
                 .then(function(result){
                     this.everyArticle = result.data.data;
                 }.bind(this))
             } 
         },
-        mounted(){
-            console.log(this.allData)
-            // console.log(this.everyArticle)
-        },
-        beforeRouteEnter: (to, from, next) => {
-            console.log(to.params)
+        beforeRouteEnter(to, from, next){
             next(vm=>{
                 vm.everyArticle = to.params.id ? to.params : JSON.parse(sessionStorage.params);
                 to.params.id && (sessionStorage.params = JSON.stringify(to.params));
-                console.log(vm.everyArticle)
             })
+        },
+        beforeRouteUpdate(to, from, next){
+            this.everyArticle = to.params.id ? to.params : JSON.parse(sessionStorage.params);
+            to.params.id && (sessionStorage.params = JSON.stringify(to.params));
         }
     }
 </script>
@@ -95,6 +103,7 @@
         border:1px solid #ccc;
         border-radius: 3px;
         margin: 8px 0;
+        overflow: hidden;
     }
     .head{
         height: 30px;
@@ -148,6 +157,10 @@
         }
         span:hover{
             color: lightblue;
+        }
+        a{
+            color: #000;
+            text-decoration: none;
         }
     }
     .nextsPosts{

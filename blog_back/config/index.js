@@ -30,7 +30,7 @@ module.exports = {
         proxyTable: {
             '/api': {
                 //后台接口地址
-                target: 'http://localhost:9999',
+                target: 'http://123.56.217.228:9999',
                 //这里可以模拟服务器进行get和post参数的传递
                 changeOrigin: true,
                 //前端所有的/api请求都会请求到后台的/api路径之下
@@ -40,7 +40,7 @@ module.exports = {
             },
             '/ueditor': {
                 //后台接口地址
-                target: 'http://localhost:9999',
+                target: 'http://123.56.217.228:9999',
                 //这里可以模拟服务器进行get和post参数的传递
                 changeOrigin: true,
                 //前端所有的/ueditor'请求都会请求到后台的/ueditor'路径之下

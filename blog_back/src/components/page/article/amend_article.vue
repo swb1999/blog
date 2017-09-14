@@ -83,25 +83,11 @@
             params.time = options.time;
             params.daodu = options.introduction;
             params.imgsrc = "/static/images/166c9a7c97d84c9.jpg";
-            params.recommend = options.recommendState === "是" ? 1 : 0;
-            params.art_show = options.stateState === "显示" ? 1 : 0;
+            params.recommend = options.recommendState;
+            params.art_show = options.stateState;
             params.enname_one = options.enname_one;
             params.id = options.id;
             params.visitors = 6;
-            console.log(params)
-            // {
-            //     id:string           //  当前文章的唯一标识
-            //     article_name：string    //文章标题
-            //     visitors：string    //当前文章的访客量
-            //     editer：string    // 作者
-            //     content：string    // 文章的内容
-            //     time：string    //  文章的创建时间
-            //     daodu：string    // 文章的导读
-            //     imgsrc：string    //为可选项，标题导图
-            //     recommend：1/0    //boolen值，1代表true，0代表false 是否在首页推荐显示
-            //     art_show：1/0     // boolen值，1代表true，0代表false 是否显示
-            //     enname_one：string    //一级分类的英文标识，根据此字段插入不同的表
-            //     }
             this.axios.post("/api/back_article/amendArticle",params)
                 .then(result=>{
                     result.data.code === "3031" ? $this[ADD_SUCCESS.action_type]({this:$this,title:"文章修改成功",message:result.data.msg}) : $this[ADD_ERROR.action_type]({this:$this,title:"文章修改失败",message:result.data.msg})

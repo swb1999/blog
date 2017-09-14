@@ -14,7 +14,7 @@
                 <p class="postedby">
                     <span class="sep">发表时间</span>
                     <a href="javascript:;" rel="bookmark">
-                        <time class="entry-date" :datetime="keydata.time" pubdate="">{{keydata.time}}</time>
+                        <time class="entry-date" :datetime="keydata.TIME" pubdate="">{{keydata.TIME.slice(0,10)}}</time>
                     </a>
                     <span class="sep"> 作者</span>
                     <span class="author vcard">

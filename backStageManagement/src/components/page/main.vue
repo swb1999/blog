@@ -1,19 +1,19 @@
 <template>
     <div class="parent">
         <loop class="loop"></loop>
-            <div class="context">
-             <template v-for="(item,index) in everyPage"> 
-                <my-section :keydata="item" :index="index+1"></my-section>
-             </template> 
-            <div class="block">
-                <el-pagination
-                    layout="prev, pager, next, total"
-                    :total="allDataLength"
-                    :page-size = "pageSize"
-                    @current-change="currentChange">
-                </el-pagination>
-            </div>
-          </div>
+        <div class="context">
+            <template v-for="(item,index) in everyPage"> 
+            <my-section :keydata="item" :index="index+1"></my-section>
+            </template> 
+        <div class="block">
+            <el-pagination
+                layout="prev, pager, next, total"
+                :total="allDataLength"
+                :page-size = "pageSize"
+                @current-change="currentChange">
+            </el-pagination>
+        </div>
+        </div>
     </div>  
 </template>
 <script>
@@ -29,7 +29,7 @@ export default {
     },
     computed:{
         ...mapState({
-            allData:state=>state.module_one.allData,
+            currentArticle:state=>state.module_one.currentArticle,
             everyPage:state=>state.module_one.everyPage,
             allDataLength:state=>state.module_one.allDataLength
         })
@@ -43,9 +43,6 @@ export default {
     components:{
         loop,
         mySection:section
-    },
-    mounted(){
-        
     }
 }
 </script>

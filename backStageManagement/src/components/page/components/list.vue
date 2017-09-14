@@ -1,7 +1,7 @@
 <template>
     <div class="list">
-         <slot name="class_one">Archives</slot> 
-        <ul>
+        <slot name="class_one" class="listTitle">Archives</slot> 
+        <ul class="listContent">
             <slot><a href="#">August 2011</a>&nbsp;(1)</slot>
 	    </ul>
     </div>
@@ -11,7 +11,7 @@
 
     }
 </script>
-<style lang="scss" scoped>
+<style lang="scss" scoped>  
     .list{
         margin: 30px 0;
     }
@@ -35,5 +35,20 @@
     a:hover{
         color: #888A13;
     }
+    p{
+        float: right;
+        padding-right: 15px;
+        color: #959494;
+    }
+    .toggle{
+        margin: 0;
+        h3{
+            border-bottom: 1px solid #eee;
+            cursor: pointer;
+        }
+        ul{
+            display: none;
+        }
+    } 
 </style>
 

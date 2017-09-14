@@ -6,11 +6,11 @@
 
 <script>
 import {mapState,mapActions} from "vuex"
-import {INDEX_AXIOSGETALL} from "./store/type_mutation"
+import {INDEX_AXIOSGETALL,INDEX_DEFAULT} from "./store/type_mutation"
 export default {
   name: 'app',
   methods:{
-     ...mapActions([INDEX_AXIOSGETALL.actions_type]),
+     ...mapActions([INDEX_AXIOSGETALL.actions_type,INDEX_DEFAULT.actions_type]),
     toTop(){
       var toTop = document.querySelector("#toTop");
       window.addEventListener("scroll",()=>{
@@ -23,7 +23,8 @@ export default {
     }
   },
   created(){
-    this[INDEX_AXIOSGETALL.actions_type](this);
+    // this[INDEX_AXIOSGETALL.actions_type](this);
+    // this[INDEX_DEFAULT.actions_type](this)
   },
   mounted(){
     // 检测滚动条 显示隐藏按钮
@@ -34,7 +35,7 @@ export default {
 
 <style>
     body{
-      background: url("/static/images/bg.gif")
+      background: url("/static/images/bg.gif");
     }
     body::before{
       content: "";

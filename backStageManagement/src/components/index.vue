@@ -16,15 +16,15 @@
       <nav class="nav clear">
         <ul class="navList">
           <li>
-            <router-link to="/" tag="span">首页</router-link>
+            <router-link to="/index/main" tag="span">首页</router-link>
           </li>
-          <li>关于我们</li>
+          <li>关于我</li>
+          <li><a href="http://http://123.56.217.228:9999/#/" target="_blank">登录/后台</a></li>
           <li>留言</li>
-          <li>登录/后台</li>
         </ul>
         <div class="search">
-          <input type="text" placeholder="输入文章名、作者" v-model="searchText">
-          <button type="button" @click="searchButton"></button>
+          <input type="text" placeholder="输入文章名、作者" v-model="searchText" @keyup.enter="searchButton">
+          <button type="button" @click.enter="searchButton"></button>
         </div>
       </nav>
       <div class="main clear">
@@ -32,9 +32,21 @@
           <router-view></router-view>
         </div>
         <div class="right">
-          <list v-for="(item,index) in navData" :key="index">
-              <h3 slot="class_one">{{item.cnname}}</h3>   
-              <li v-for="val in 4"><a href="#">August 2011</a>&nbsp;(1)</li>
+          <list>
+            <h3 slot="class_one">访问排行</h3>
+            <template v-for="val in topList">
+              <router-link :to="{name:'single',params:val}" tag="li"><a href="javascript:;">{{val.article_name}}</a><p>{{val.visitors}}次</p></router-link>
+            </template>
+          </list>  
+          <list>
+            <h3 slot="class_one">最新更新</h3>
+            <template v-for="val in newList">
+              <router-link :to="{name:'single',params:val}" tag="li"><a href="javascript:;">{{val.article_name}}</a><p>{{val.TIME.substr(0,10)}}</p></router-link>
+            </template>
+          </list> 
+          <list v-for="(item,index) in navData" :key="index" class="toggle">
+              <h3 slot="class_one">{{item.onedata.cnname}}</h3>   
+              <li v-for="val in item.twodata"><a href="#">{{val.cnname}}</a>&nbsp;({{val.article_num}})</li> 
           </list>
         </div>
       </div>
@@ -47,7 +59,7 @@
 <script>
 import list from "./page/components/list"
 import {mapState,mapActions} from "vuex"
-import {INDEX_EVERYPAGE} from "../store/type_mutation"
+import {INDEX_EVERYPAGE,INDEX_CURRENTARTICLE,INDEX_TOPDATA,INDEX_NEWDATA,INDEX_TOPARRAY} from "../store/type_mutation"
 export default {
   name: 'hello',
   data () {
@@ -56,20 +68,30 @@ export default {
     }
   },
   methods:{
+    ...mapActions([INDEX_CURRENTARTICLE.actions_type,INDEX_TOPARRAY.actions_type]),
     searchButton(){
       if(this.searchText){
-       console.log(this.allData)
+       this[INDEX_CURRENTARTICLE.actions_type](this.searchText)
       }
+    },
+    updataArticleArray(type){
+      this[INDEX_TOPARRAY.actions_type](type);
     }
   },
   computed:{
     ...mapState({
       navData:state=>state.module_one.navData,
-      allData:state=>state.module_one.allData
+      topList:state=>state.module_one.topList,
+      newList:state=>state.module_one.newList,
     })
   },
   components:{
     list
+  },
+  beforeRouteEnter:(to, from, next) => {
+    next(vm=>{
+        !vm.navData && vm.$router.push({name:"login"})
+    })
   }
 }
 </script>
@@ -83,7 +105,7 @@ export default {
     clear: both;
   }
   .container{
-    width: 960px;
+    width: 1024px;
     margin: 0 auto;
   }
   .head{
@@ -145,6 +167,13 @@ export default {
     li:hover{
       color: #EBEE13;
     }
+    a{
+      color: #fff;
+      text-decoration: none;
+    }
+    a:hover{
+      color: #EBEE13;
+    }
   }
   .search{
     padding-right: 20px;
@@ -184,7 +213,7 @@ export default {
   }
   .left{
     float: left;
-    width: 575px;
+    width: 639px;
     margin-left: 60px;
   }
   .right{
@@ -227,5 +256,17 @@ export default {
       margin-top: 22px;
       opacity: .5;
       transition: opacity .5s ease-in-out;
+  }
+  a{
+      color: #959494;
+      text-decoration: none;
+  }
+  a:hover{
+      color: #888A13;
+  }
+  p{
+      float: right;
+      padding-right: 15px;
+      color: #959494;
   }
 </style>
